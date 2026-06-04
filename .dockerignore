@@ -1,0 +1,39 @@
+# Python
+venv
+backend/venv
+__pycache__
+*.pyc
+
+# Node
+frontend/node_modules
+
+# Git
+.git
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Build outputs
+dist
+build
+
+# Cache
+.cache
+
+# Models (VERY IMPORTANT)
+models
+backend/models
+
+# Datasets (VERY IMPORTANT)
+samples
+
+# Temp
+tmp
+temp

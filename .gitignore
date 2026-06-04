@@ -1,0 +1,36 @@
+# Python
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Docker
+*.log
+
+# Build
+build/
+dist/
+
+# OS
+.DS_Store
+
+# Python cache
+.pytest_cache/
+
+# Models (optional if very large)
+backend/models/*.pt
+backend/models/*.pth
+
+# Temporary
+tmp/
+temp/
