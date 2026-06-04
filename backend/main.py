@@ -57,6 +57,15 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
+@app.get("/health")
+async def health():
+
+    return {
+        "status": "healthy",
+        "service": "NeuroSpeech AI",
+        "version": "1.0"
+    }
+
 # ==========================================
 # CORS
 # ==========================================
