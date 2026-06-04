@@ -82,7 +82,7 @@ logger.info(f"Using device: {DEVICE}")
 # ==========================================
 
 MODEL_DIR = Path("models")
-SAMPLES_DIR = Path("../samples")
+SAMPLES_DIR = Path("samples")
 
 PRESENCE_MODEL_PATH = MODEL_DIR / "catboost_presence1.cbm"
 SEVERITY_MODEL_PATH = MODEL_DIR / "catboost_severity1.cbm"
@@ -550,7 +550,7 @@ async def extract_features(
 
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
-@app.get("/samples")
+@app.get("samples")
 def get_samples():
 
     result = {}
@@ -835,7 +835,7 @@ async def sample_advanced_analysis(
     try:
 
         sample_path = (
-            Path("../samples")
+            Path("samples")
             / request.dataset
             / request.category
             / request.filename
