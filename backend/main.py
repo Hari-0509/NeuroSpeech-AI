@@ -183,7 +183,7 @@ def load_hubert():
 # ==========================================
 
 def extract_hubert_feature(
-	audio_path: str
+    audio_path: str
 ):
 
     feature_extractor, hubert = load_hubert()
@@ -300,13 +300,15 @@ def predict_audio(audio_path: str):
         )
         return None, None, None
 
-def predict_sample_from_path(
-    audio_path: str
+def predict_sample_from_embedding(
+    feat
 ):
 
-    feat = extract_hubert_feature(
-        audio_path
-    )
+    if feat is None:
+
+        raise Exception(
+            "Feature extraction failed."
+        )
 
     feat = feat.reshape(
         1,
@@ -332,11 +334,10 @@ def predict_sample_from_path(
         return {
             "condition": "Normal",
             "severity": "None",
-            "confidence":
-                round(
-                    presence_prob * 100,
-                    2
-                )
+            "confidence": round(
+                presence_prob * 100,
+                2
+            )
         }
 
     severity_pred = int(
@@ -352,18 +353,15 @@ def predict_sample_from_path(
     }
 
     return {
-        "condition":
-            "Dysarthria",
-        "severity":
-            severity_map.get(
-                severity_pred,
-                "Unknown"
-            ),
-        "confidence":
-            round(
-                presence_prob * 100,
-                2
-            )
+        "condition": "Dysarthria",
+        "severity": severity_map.get(
+            severity_pred,
+            "Unknown"
+        ),
+        "confidence": round(
+            presence_prob * 100,
+            2
+        )
     }
 
 # ==========================================
@@ -869,6 +867,13 @@ async def sample_advanced_analysis(
             str(sample_path)
         )
 
+        if embedding is None:
+
+            raise HTTPException(
+                status_code=500,
+                detail="Feature extraction failed."
+            )
+
         reference = np.random.normal(
             0,
             1,
@@ -885,7 +890,6 @@ async def sample_advanced_analysis(
                 -1
             )
         ])
-
         pca = PCA(
             n_components=2
         )
@@ -904,9 +908,9 @@ async def sample_advanced_analysis(
             combined
         )
 
-        prediction = predict_sample_from_path(
-            str(sample_path)
-        )
+        prediction = predict_sample_from_embedding(
+            embedding
+    )
 
         return {
             "prediction": prediction,
