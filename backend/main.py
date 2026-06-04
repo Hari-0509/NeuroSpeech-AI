@@ -550,7 +550,7 @@ async def extract_features(
 
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
-@app.get("samples")
+@app.get("/samples")
 def get_samples():
 
     result = {}
