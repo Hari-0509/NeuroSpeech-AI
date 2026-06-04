@@ -97,61 +97,96 @@ hubert = None
 presence_model = None
 severity_model = None
 
-
 @app.on_event("startup")
 async def load_models():
 
-    global feature_extractor
-    global hubert
     global presence_model
     global severity_model
 
     try:
 
-        logger.info("Loading HuBERT feature extractor...")
-
-        feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            "facebook/hubert-base-ls960"
+        logger.info(
+            "Loading CatBoost models..."
         )
 
-        logger.info("Loading HuBERT model...")
-
-        hubert = HubertModel.from_pretrained(
-            "facebook/hubert-base-ls960"
-        ).to(DEVICE)
-
-        hubert.eval()
-
-        logger.info("Loading CatBoost presence model...")
-
-        presence_model = CatBoostClassifier()
+        presence_model = (
+            CatBoostClassifier()
+        )
 
         presence_model.load_model(
             str(PRESENCE_MODEL_PATH),
             format="cbm"
         )
 
-        logger.info("Loading CatBoost severity model...")
-
-        severity_model = CatBoostClassifier()
+        severity_model = (
+            CatBoostClassifier()
+        )
 
         severity_model.load_model(
             str(SEVERITY_MODEL_PATH),
             format="cbm"
         )
 
-        logger.info("All models loaded successfully")
+        logger.info(
+            "CatBoost models loaded."
+        )
 
     except Exception as e:
 
-        logger.error(f"Model loading failed: {e}")
+        logger.error(
+            f"Startup failed: {e}"
+        )
 
         raise
+
+def load_hubert():
+
+    global feature_extractor
+    global hubert
+
+    if feature_extractor is None:
+
+        logger.info(
+            "Loading HuBERT Feature Extractor..."
+        )
+
+        feature_extractor = (
+            Wav2Vec2FeatureExtractor
+            .from_pretrained(
+                "facebook/hubert-base-ls960"
+            )
+        )
+
+    if hubert is None:
+
+        logger.info(
+            "Loading HuBERT Model..."
+        )
+
+        hubert = (
+            HubertModel
+            .from_pretrained(
+                "facebook/hubert-base-ls960"
+            )
+            .to(DEVICE)
+        )
+
+        hubert.eval()
+
+    return (
+        feature_extractor,
+        hubert
+    )
+
 # ==========================================
 # Feature Extraction
 # ==========================================
 
-def extract_hubert_feature(audio_path: str):
+def extract_hubert_feature(
+	audio_path: str
+):
+
+    feature_extractor, hubert = load_hubert()
 
     try:
 
